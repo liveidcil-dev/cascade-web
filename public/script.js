@@ -131,6 +131,12 @@ function setupSmoothHeroVideoLoop() {
   let isSwapping = false;
   let monitorFrame = 0;
 
+  function showOnlyActiveLayer(index) {
+    heroVideoLayers.forEach((video, layerIndex) => {
+      video.classList.toggle("is-visible", layerIndex === index);
+    });
+  }
+
   function seekToStart(video) {
     if (video.readyState === 0) {
       video.load();
@@ -175,6 +181,7 @@ function setupSmoothHeroVideoLoop() {
       currentVideo.pause();
       seekToStart(currentVideo);
       activeIndex = nextIndex;
+      showOnlyActiveLayer(activeIndex);
       isSwapping = false;
     }, fadeDurationMs);
   }
@@ -198,7 +205,6 @@ function setupSmoothHeroVideoLoop() {
     video.playsInline = true;
     video.preload = "auto";
     video.loop = false;
-    video.classList.toggle("is-visible", index === activeIndex);
     seekToStart(video);
 
     video.addEventListener("ended", () => {
@@ -208,6 +214,7 @@ function setupSmoothHeroVideoLoop() {
     });
   });
 
+  showOnlyActiveLayer(activeIndex);
   playVideo(heroVideoLayers[activeIndex]);
   monitorFrame = requestAnimationFrame(monitorActiveVideo);
 
@@ -219,6 +226,7 @@ function setupSmoothHeroVideoLoop() {
     }
 
     playVideo(heroVideoLayers[activeIndex]);
+    showOnlyActiveLayer(activeIndex);
     monitorFrame = requestAnimationFrame(monitorActiveVideo);
   });
 }
