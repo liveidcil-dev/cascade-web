@@ -26,6 +26,15 @@ Production traffic is served at `https://cascaderealestatemanagement.com/`.
 - Contact endpoint: `/api/contact`, implemented by `functions/api/contact.js`
 - Node server: `server.js` is only for local preview and is not required by Cloudflare Pages.
 
+GitHub Actions deploys this repo to the existing Cloudflare Pages project `cascaderealestatemanagement`.
+
+Required GitHub repository configuration:
+
+- Repository variable: `CLOUDFLARE_ACCOUNT_ID`
+- Repository secret: `CLOUDFLARE_API_TOKEN`
+
+The Cloudflare API token should have `Account > Cloudflare Pages > Edit` permission for the Cloudflare account that owns the Pages project.
+
 The frontend uses relative asset paths such as `assets/cascade-mountains.mp4`, so the hero video and property images deploy from the `public/assets/` directory.
 
 ## Contact Form Backend Status
@@ -45,7 +54,7 @@ If delivery is not configured or Resend rejects the email, the endpoint returns 
 ## What This Includes
 
 - Modern one-page marketing site with a real Pexels mountain video loop.
-- Services, portfolio, about, housing resources, and contact sections based on the public current website.
+- Services, portfolio, about, and contact sections based on the public current website.
 - Portfolio filtering without WordPress.
 - Cloudflare Pages Function contact endpoint at `/api/contact`.
 
