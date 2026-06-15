@@ -98,19 +98,36 @@ button {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   font-weight: 760;
+  min-width: 0;
   white-space: nowrap;
 }
 
 .brand-mark {
-  display: inline-grid;
-  width: 44px;
-  height: 44px;
-  place-items: center;
-  border: 1px solid currentColor;
-  font-size: 0.82rem;
-  letter-spacing: 0;
+  display: inline-flex;
+  width: 74px;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 26px rgba(7, 15, 12, 0.2);
+}
+
+.site-header.is-scrolled .brand-mark,
+.site-header.is-open .brand-mark {
+  border-color: var(--line);
+  box-shadow: none;
+}
+
+.brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .brand-name {
@@ -336,39 +353,14 @@ p {
 }
 
 .philosophy-band {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: 58px;
-  align-items: center;
   width: min(calc(100% - 48px), var(--container));
   margin: 0 auto 96px;
   padding: 42px 0 0;
   border-top: 1px solid var(--line);
 }
 
-.philosophy-media {
-  display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
-  grid-template-rows: repeat(2, minmax(140px, 1fr));
-  gap: 14px;
-}
-
-.philosophy-media img {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  object-fit: cover;
-  border-radius: 8px;
-  background: var(--stone);
-}
-
-.philosophy-media img:first-child {
-  grid-row: 1 / -1;
-  aspect-ratio: 4 / 5;
-}
-
 .philosophy-copy {
-  max-width: 560px;
+  max-width: 760px;
 }
 
 .philosophy-copy h2 {
@@ -469,18 +461,11 @@ p {
 }
 
 .portfolio-card {
-  overflow: hidden;
-}
-
-.portfolio-card img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  background: var(--stone);
+  min-height: 230px;
 }
 
 .portfolio-card-body {
-  padding: 18px;
+  padding: 22px;
 }
 
 .portfolio-meta {
@@ -538,16 +523,8 @@ p {
 
 .about-section {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
-  gap: 64px;
-  align-items: center;
-}
-
-.about-media img {
-  width: 100%;
-  aspect-ratio: 5 / 6;
-  object-fit: cover;
-  border-radius: 8px;
+  grid-template-columns: minmax(0, 760px);
+  justify-content: start;
 }
 
 .about-copy p:not(.eyebrow) {
@@ -780,6 +757,16 @@ p {
     padding-inline: 18px;
   }
 
+  .brand {
+    gap: 8px;
+  }
+
+  .brand-mark {
+    width: 58px;
+    height: 42px;
+    padding: 3px;
+  }
+
   .brand-name {
     max-width: 190px;
     overflow: hidden;
@@ -810,21 +797,11 @@ p {
   .metric-band,
   .service-grid,
   .portfolio-grid,
-  .philosophy-media,
   .process-list,
   .team-grid,
   .resource-grid,
   .contact-form {
     grid-template-columns: 1fr;
-  }
-
-  .philosophy-media {
-    grid-template-rows: none;
-  }
-
-  .philosophy-media img:first-child {
-    grid-row: auto;
-    aspect-ratio: 4 / 3;
   }
 
   .metric-band article {

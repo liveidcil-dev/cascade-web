@@ -1,6 +1,8 @@
 # Cascade Management Local Site
 
-Standalone, non-WordPress rebuild for `cascademanagement.us`.
+Standalone, non-WordPress rebuild for `cascaderealestatemanagement.com`.
+
+Live site: `https://cascaderealestatemanagement.com/`
 
 ## Run Locally
 
@@ -16,6 +18,7 @@ Then open `http://127.0.0.1:4173`.
 ## Cloudflare Pages Deployment
 
 This project is Pages-ready as a static frontend plus a Pages Function.
+Production traffic is served at `https://cascaderealestatemanagement.com/`.
 
 - Build command: `npm run build` or leave blank.
 - Output directory: `public`
@@ -27,14 +30,17 @@ The frontend uses relative asset paths such as `assets/cascade-mountains.mp4`, s
 
 ## Contact Form Backend Status
 
-The production contact form no longer writes to local JSON. The Cloudflare Pages Function validates and sanitizes the inquiry, returns a successful response, and logs only safe metadata for now.
+The production contact form no longer writes to local JSON. The Cloudflare Pages Function validates and sanitizes the inquiry, sends it by email, and logs only safe metadata.
 
-Next wiring points are marked in `functions/api/contact.js`:
+Current routing:
 
-- Resend email notification
-- Google Sheets append
-- Cloudflare D1 persistence
-- Other email or CRM routing
+- Recipient: `daniel@cascademanagement.us`
+- Delivery provider: Resend API from `functions/api/contact.js`
+- Required Cloudflare Pages secret: `RESEND_API_KEY`
+- Optional Cloudflare Pages variable: `CONTACT_FROM_EMAIL`, for example `Cascade Management <contact@cascaderealestatemanagement.com>`
+- Optional Cloudflare Pages variable: `CONTACT_TO_EMAIL`, a comma-separated override if the recipient changes later
+
+If delivery is not configured or Resend rejects the email, the endpoint returns an error and asks the visitor to email Daniel directly.
 
 ## What This Includes
 

@@ -11,7 +11,6 @@ const portfolioItems = [
     title: "Greenlake Multi 11-Unit",
     neighborhood: "Green Lake",
     type: "multifamily",
-    image: "assets/greenlake.jpg",
     description:
       "A larger multifamily asset where leasing, maintenance, and resident communication need to stay tightly coordinated."
   },
@@ -19,7 +18,6 @@ const portfolioItems = [
     title: "Capitol Hill Fourplex",
     neighborhood: "Capitol Hill",
     type: "multifamily",
-    image: "assets/capitol-hill.jpg",
     description:
       "Long-term multifamily management in one of Seattle's highest-demand rental neighborhoods."
   },
@@ -27,7 +25,6 @@ const portfolioItems = [
     title: "Ballard Single Family",
     neighborhood: "Ballard",
     type: "single",
-    image: "assets/ballard.jpg",
     description:
       "A classic Seattle home supported through turnover planning, leasing, and ongoing owner communication."
   },
@@ -35,7 +32,6 @@ const portfolioItems = [
     title: "Madison Valley Single",
     neighborhood: "Madison Valley",
     type: "single",
-    image: "assets/madison-valley.jpg",
     description:
       "Residential management in a central neighborhood with careful resident selection and asset oversight."
   },
@@ -43,7 +39,6 @@ const portfolioItems = [
     title: "Portage Bay Residence",
     neighborhood: "Portage Bay",
     type: "single",
-    image: "assets/portage-bay.jpg",
     description:
       "Single-family property management near Seattle's lakefront rental corridors."
   },
@@ -51,7 +46,6 @@ const portfolioItems = [
     title: "Central District Portfolio",
     neighborhood: "Central District",
     type: "multifamily",
-    image: "assets/central-area.jpg",
     description:
       "Homes and small multifamily assets managed around occupancy, maintenance, and neighborhood context."
   },
@@ -59,7 +53,6 @@ const portfolioItems = [
     title: "Greenwood Mixed Use",
     neighborhood: "Greenwood",
     type: "commercial",
-    image: "assets/greenlake.jpg",
     description:
       "Residential and retail use coordinated across maintenance, resident needs, and property performance."
   },
@@ -67,7 +60,6 @@ const portfolioItems = [
     title: "Crown Hill Commercial",
     neighborhood: "Crown Hill",
     type: "commercial",
-    image: "assets/ballard.jpg",
     description:
       "Commercial rental management with practical owner reporting and vendor coordination."
   },
@@ -75,7 +67,6 @@ const portfolioItems = [
     title: "Burien Multi 6-Units",
     neighborhood: "Burien",
     type: "multifamily",
-    image: "assets/madison-valley.jpg",
     description:
       "Management continuity through ownership transitions and stabilization of a small multifamily asset."
   }
@@ -108,7 +99,6 @@ function normalizeType(value) {
 function portfolioCard(item) {
   return `
     <article class="portfolio-card">
-      <img src="${item.image}" alt="${item.title} in ${item.neighborhood}" decoding="async" />
       <div class="portfolio-card-body">
         <div class="portfolio-meta">
           <span>${normalizeType(item.type)}</span>
@@ -133,7 +123,7 @@ async function submitContact(event) {
 
   const data = Object.fromEntries(new FormData(contactForm));
   formStatus.classList.remove("error");
-  formStatus.textContent = "Saving inquiry...";
+  formStatus.textContent = "Sending inquiry...";
 
   try {
     const response = await fetch("api/contact", {

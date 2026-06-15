@@ -1,4 +1,6 @@
 const MAX_MESSAGE_LENGTH = 2000;
+const DEFAULT_CONTACT_RECIPIENT = "daniel@cascademanagement.us";
+const DEFAULT_FROM_EMAIL = "Cascade Management <onboarding@resend.dev>";
 
 function json(payload, init = {}) {
   return new Response(JSON.stringify(payload), {
@@ -41,11 +43,68 @@ function sanitizeInquiry(body) {
   return { inquiry };
 }
 
+function getRecipients(env = {}) {
+  return String(env.CONTACT_TO_EMAIL || DEFAULT_CONTACT_RECIPIENT)
+    .split(",")
+    .map((email) => email.trim())
+    .filter(Boolean);
+}
+
+function formatInquiryEmail(inquiry) {
+  const topic = inquiry.topic || "Not specified";
+  const phone = inquiry.phone || "Not provided";
+
+  return [
+    "New Cascade Management inquiry",
+    "",
+    `Name: ${inquiry.name}`,
+    `Email: ${inquiry.email}`,
+    `Phone: ${phone}`,
+    `Topic: ${topic}`,
+    `Received: ${inquiry.receivedAt}`,
+    "",
+    "Message:",
+    inquiry.message
+  ].join("\n");
+}
+
+async function sendInquiryEmail(env = {}, inquiry) {
+  if (!env.RESEND_API_KEY) {
+    throw new Error("RESEND_API_KEY is not configured.");
+  }
+
+  const recipients = getRecipients(env);
+
+  if (!recipients.length) {
+    throw new Error("No contact form recipient is configured.");
+  }
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: env.CONTACT_FROM_EMAIL || DEFAULT_FROM_EMAIL,
+      to: recipients,
+      reply_to: inquiry.email,
+      subject: `New Cascade inquiry from ${inquiry.name}`,
+      text: formatInquiryEmail(inquiry)
+    })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Resend delivery failed (${response.status}): ${errorText}`);
+  }
+}
+
 export async function onRequestOptions() {
   return json({ ok: true });
 }
 
-export async function onRequestPost({ request }) {
+export async function onRequestPost({ request, env = {} }) {
   let body;
 
   try {
@@ -60,10 +119,24 @@ export async function onRequestPost({ request }) {
     return json({ error }, { status: 400 });
   }
 
-  // Production persistence is intentionally not wired yet.
-  // TODO: Send an owner notification via Resend once RESEND_API_KEY and recipient rules are set.
-  // TODO: Optionally append sanitized inquiries to Google Sheets for non-technical review.
-  // TODO: Optionally store sanitized inquiries in Cloudflare D1 if a durable database is preferred.
+  try {
+    await sendInquiryEmail(env, inquiry);
+  } catch (deliveryError) {
+    console.error("Cascade contact delivery failed", {
+      error: deliveryError.message,
+      recipient: getRecipients(env),
+      receivedAt: inquiry.receivedAt
+    });
+
+    return json(
+      {
+        error:
+          "Sorry, the message could not be sent right now. Please email daniel@cascademanagement.us directly."
+      },
+      { status: 502 }
+    );
+  }
+
   // Avoid logging message bodies in high-volume production unless retention and access controls are defined.
   console.log("Cascade contact inquiry received", {
     name: inquiry.name,
@@ -75,10 +148,9 @@ export async function onRequestPost({ request }) {
 
   return json(
     {
-      message:
-        "Thanks. Your inquiry was received. Cascade Management will follow up after production notifications are connected."
+      message: "Thanks. Your inquiry was sent. Cascade Management will follow up shortly."
     },
-    { status: 202 }
+    { status: 200 }
   );
 }
 

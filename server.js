@@ -7,6 +7,7 @@ const HOST = "127.0.0.1";
 const ROOT = __dirname;
 const PUBLIC_DIR = path.join(ROOT, "public");
 const MAX_MESSAGE_LENGTH = 2000;
+const CONTACT_RECIPIENT = "daniel@cascademanagement.us";
 
 const MIME_TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -96,19 +97,18 @@ async function handleContact(req, res) {
     return;
   }
 
-  // Local preview mirrors the Cloudflare Pages Function shape without persisting data.
-  // TODO: Wire production delivery in functions/api/contact.js using Resend, Google Sheets, or D1.
+  // Local preview mirrors the Cloudflare Pages Function response shape without sending email.
   console.log("Local contact inquiry received", {
     name: inquiry.name,
     email: inquiry.email,
     phoneProvided: Boolean(inquiry.phone),
     topic: inquiry.topic,
+    recipient: CONTACT_RECIPIENT,
     receivedAt: inquiry.receivedAt
   });
 
-  sendJson(res, 202, {
-    message:
-      "Thanks. Your inquiry was received. Cascade Management will follow up after production notifications are connected."
+  sendJson(res, 200, {
+    message: "Thanks. Your inquiry was sent. Cascade Management will follow up shortly."
   });
 }
 
