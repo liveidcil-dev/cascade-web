@@ -1,5 +1,6 @@
 const http = require("http");
-const fs = require("fs/promises");
+const fs = require("fs");
+const fsp = require("fs/promises");
 const path = require("path");
 
 const PORT = Number(process.env.PORT || 4173);
@@ -132,7 +133,101 @@ function safeStaticPath(requestPath) {
   return path.join(PUBLIC_DIR, normalized);
 }
 
-async function serveStatic(res, requestPath) {
+function parseRangeHeader(rangeHeader, fileSize) {
+  const match = /^bytes=(\d*)-(\d*)$/.exec(rangeHeader || "");
+
+  if (!match) {
+    return null;
+  }
+
+  const [, rawStart, rawEnd] = match;
+  let start = rawStart ? Number(rawStart) : 0;
+  let end = rawEnd ? Number(rawEnd) : fileSize - 1;
+
+  if (!rawStart && rawEnd) {
+    const suffixLength = Number(rawEnd);
+    start = Math.max(fileSize - suffixLength, 0);
+    end = fileSize - 1;
+  }
+
+  if (
+    !Number.isInteger(start) ||
+    !Number.isInteger(end) ||
+    start < 0 ||
+    end < start ||
+    start >= fileSize
+  ) {
+    return null;
+  }
+
+  return {
+    start,
+    end: Math.min(end, fileSize - 1)
+  };
+}
+
+function streamFile(res, filePath, headers, streamOptions = {}) {
+  res.writeHead(headers.statusCode, headers.values);
+  const stream = fs.createReadStream(filePath, streamOptions);
+  stream.on("error", () => {
+    if (!res.headersSent) {
+      sendText(res, 500, "Internal Server Error");
+      return;
+    }
+
+    res.destroy();
+  });
+  stream.pipe(res);
+}
+
+async function serveVideo(req, res, filePath, extension, fileSize) {
+  const baseHeaders = {
+    "Content-Type": MIME_TYPES[extension] || "application/octet-stream",
+    "Cache-Control": "public, max-age=3600",
+    "Accept-Ranges": "bytes"
+  };
+  const range = req.headers.range;
+
+  if (!range) {
+    streamFile(res, filePath, {
+      statusCode: 200,
+      values: {
+        ...baseHeaders,
+        "Content-Length": fileSize
+      }
+    });
+    return;
+  }
+
+  const parsedRange = parseRangeHeader(range, fileSize);
+
+  if (!parsedRange) {
+    res.writeHead(416, {
+      ...baseHeaders,
+      "Content-Range": `bytes */${fileSize}`
+    });
+    res.end();
+    return;
+  }
+
+  const { start, end } = parsedRange;
+
+  streamFile(
+    res,
+    filePath,
+    {
+      statusCode: 206,
+      values: {
+        ...baseHeaders,
+        "Content-Length": end - start + 1,
+        "Content-Range": `bytes ${start}-${end}/${fileSize}`
+      }
+    },
+    { start, end }
+  );
+}
+
+async function serveStatic(req, res, requestPath) {
   const filePath = safeStaticPath(requestPath);
 
   if (!filePath.startsWith(PUBLIC_DIR)) {
@@ -141,9 +236,17 @@ async function serveStatic(res, requestPath) {
   }
 
   try {
-    const file = await fs.readFile(filePath);
+    const stats = await fsp.stat(filePath);
     const extension = path.extname(filePath).toLowerCase();
     const isHtml = extension === ".html";
+    const isVideo = extension === ".mp4" || extension === ".webm";
+
+    if (isVideo) {
+      await serveVideo(req, res, filePath, extension, stats.size);
+      return;
+    }
+
+    const file = await fsp.readFile(filePath);
 
     res.writeHead(200, {
       "Content-Type": MIME_TYPES[extension] || "application/octet-stream",
@@ -165,7 +268,7 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    await serveStatic(res, pathname);
+    await serveStatic(req, res, pathname);
   } catch (error) {
     console.error(error);
     sendJson(res, 500, { error: "Internal Server Error" });

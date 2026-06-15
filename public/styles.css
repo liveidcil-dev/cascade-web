@@ -106,15 +106,15 @@ button {
 
 .brand-mark {
   display: inline-flex;
-  width: 74px;
-  height: 52px;
+  width: 78px;
+  height: 60px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.62);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.92);
+  padding: 3px;
+  border: 1.5px solid rgba(255, 255, 255, 0.72);
+  border-radius: 16px;
+  background: #ffffff;
   box-shadow: 0 10px 26px rgba(7, 15, 12, 0.2);
 }
 
@@ -128,6 +128,7 @@ button {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  border-radius: 12px;
 }
 
 .brand-name {
@@ -180,7 +181,7 @@ button {
   background: var(--spruce-dark);
 }
 
-.hero-video,
+.hero-video-stack,
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -188,8 +189,26 @@ button {
   height: 100%;
 }
 
+.hero-video-stack {
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(18, 61, 49, 0.2), rgba(18, 61, 49, 0.2)),
+    url("assets/cascade-mountains-poster.jpg") center / cover no-repeat;
+}
+
 .hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  opacity: 0;
+  transition: opacity 900ms ease;
+  will-change: opacity;
+}
+
+.hero-video.is-visible {
+  opacity: 1;
 }
 
 .hero-overlay {
@@ -762,9 +781,9 @@ p {
   }
 
   .brand-mark {
-    width: 58px;
-    height: 42px;
-    padding: 3px;
+    width: 62px;
+    height: 48px;
+    border-radius: 14px;
   }
 
   .brand-name {

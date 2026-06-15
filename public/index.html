@@ -9,7 +9,7 @@
       content="Cascade Management provides people-first Seattle property management shaped around clear ownership goals, resident care, and long-term asset value."
     />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=20260615c" />
+    <link rel="stylesheet" href="styles.css?v=20260615e" />
   </head>
   <body>
     <header class="site-header" data-header>
@@ -43,16 +43,32 @@
 
     <main>
       <section class="hero" id="home">
-        <video
-          class="hero-video"
-          autoplay
-          muted
-          loop
-          playsinline
-          poster="assets/cascade-mountains-poster.jpg"
-        >
-          <source src="assets/cascade-mountains.mp4" type="video/mp4" />
-        </video>
+        <div class="hero-video-stack" data-hero-video>
+          <video
+            class="hero-video is-visible"
+            data-hero-video-layer
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            poster="assets/cascade-mountains-poster.jpg"
+            aria-hidden="true"
+          >
+            <source src="assets/cascade-mountains.mp4" type="video/mp4" />
+          </video>
+          <video
+            class="hero-video"
+            data-hero-video-layer
+            muted
+            playsinline
+            preload="auto"
+            poster="assets/cascade-mountains-poster.jpg"
+            aria-hidden="true"
+          >
+            <source src="assets/cascade-mountains.mp4" type="video/mp4" />
+          </video>
+        </div>
         <div class="hero-overlay" aria-hidden="true"></div>
 
         <div class="hero-content">
@@ -298,6 +314,6 @@
       <a href="#home">Back to top</a>
     </footer>
 
-    <script src="script.js?v=20260615c"></script>
+    <script src="script.js?v=20260615d"></script>
   </body>
 </html>

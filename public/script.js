@@ -5,6 +5,7 @@ const portfolioGrid = document.querySelector("[data-portfolio-grid]");
 const filterButtons = [...document.querySelectorAll("[data-filter]")];
 const contactForm = document.querySelector("[data-contact-form]");
 const formStatus = document.querySelector("[data-form-status]");
+const heroVideoLayers = [...document.querySelectorAll("[data-hero-video-layer]")];
 
 const portfolioItems = [
   {
@@ -118,6 +119,110 @@ function renderPortfolio(filter = "all") {
   portfolioGrid.innerHTML = visibleItems.map(portfolioCard).join("");
 }
 
+function setupSmoothHeroVideoLoop() {
+  if (heroVideoLayers.length < 2) {
+    return;
+  }
+
+  const crossfadeSeconds = 1.15;
+  const resetOffsetSeconds = 0.08;
+  const fadeDurationMs = 950;
+  let activeIndex = 0;
+  let isSwapping = false;
+  let monitorFrame = 0;
+
+  function seekToStart(video) {
+    if (video.readyState === 0) {
+      video.load();
+      return;
+    }
+
+    try {
+      video.currentTime = resetOffsetSeconds;
+    } catch {
+      video.currentTime = 0;
+    }
+  }
+
+  async function playVideo(video) {
+    try {
+      await video.play();
+    } catch {
+      // Muted autoplay can still be blocked until the browser is ready.
+    }
+  }
+
+  function swapVideoLayers() {
+    if (isSwapping) {
+      return;
+    }
+
+    isSwapping = true;
+
+    const currentVideo = heroVideoLayers[activeIndex];
+    const nextIndex = (activeIndex + 1) % heroVideoLayers.length;
+    const nextVideo = heroVideoLayers[nextIndex];
+
+    seekToStart(nextVideo);
+    nextVideo.classList.add("is-visible");
+    playVideo(nextVideo);
+
+    requestAnimationFrame(() => {
+      currentVideo.classList.remove("is-visible");
+    });
+
+    window.setTimeout(() => {
+      currentVideo.pause();
+      seekToStart(currentVideo);
+      activeIndex = nextIndex;
+      isSwapping = false;
+    }, fadeDurationMs);
+  }
+
+  function monitorActiveVideo() {
+    const activeVideo = heroVideoLayers[activeIndex];
+
+    if (
+      activeVideo.duration &&
+      Number.isFinite(activeVideo.duration) &&
+      activeVideo.duration - activeVideo.currentTime <= crossfadeSeconds
+    ) {
+      swapVideoLayers();
+    }
+
+    monitorFrame = requestAnimationFrame(monitorActiveVideo);
+  }
+
+  heroVideoLayers.forEach((video, index) => {
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = "auto";
+    video.loop = false;
+    video.classList.toggle("is-visible", index === activeIndex);
+    seekToStart(video);
+
+    video.addEventListener("ended", () => {
+      if (index === activeIndex) {
+        swapVideoLayers();
+      }
+    });
+  });
+
+  playVideo(heroVideoLayers[activeIndex]);
+  monitorFrame = requestAnimationFrame(monitorActiveVideo);
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      cancelAnimationFrame(monitorFrame);
+      heroVideoLayers.forEach((video) => video.pause());
+      return;
+    }
+
+    playVideo(heroVideoLayers[activeIndex]);
+    monitorFrame = requestAnimationFrame(monitorActiveVideo);
+  });
+}
+
 async function submitContact(event) {
   event.preventDefault();
 
@@ -168,3 +273,4 @@ window.addEventListener("scroll", updateHeaderState, { passive: true });
 
 updateHeaderState();
 renderPortfolio();
+setupSmoothHeroVideoLoop();
