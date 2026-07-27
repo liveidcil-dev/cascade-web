@@ -235,10 +235,10 @@ button {
 }
 
 .hero h1 {
-  max-width: 850px;
+  max-width: 1050px;
   margin: 0;
-  font-size: clamp(3.5rem, 8vw, 7.5rem);
-  line-height: 0.92;
+  font-size: clamp(2.75rem, 5.4vw, 5.5rem);
+  line-height: 0.96;
   letter-spacing: 0;
 }
 
@@ -293,42 +293,6 @@ button {
 .button-secondary:focus-visible {
   border-color: var(--white);
   background: rgba(255, 255, 255, 0.12);
-}
-
-.metric-band {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  width: min(calc(100% - 48px), var(--container));
-  margin: -42px auto 0;
-  position: relative;
-  z-index: 5;
-  background: var(--white);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-}
-
-.metric-band article {
-  min-height: 118px;
-  padding: 24px;
-  border-right: 1px solid var(--line);
-}
-
-.metric-band article:last-child {
-  border-right: 0;
-}
-
-.metric-band span {
-  display: block;
-  color: var(--spruce);
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
-  font-weight: 800;
-  line-height: 1;
-}
-
-.metric-band p {
-  margin: 8px 0 0;
-  color: var(--ink-soft);
-  font-size: 0.95rem;
 }
 
 .section {
@@ -415,7 +379,6 @@ p {
 }
 
 .service-card,
-.portfolio-card,
 .process-list article,
 .team-grid article,
 .resource-grid a {
@@ -439,70 +402,6 @@ p {
 
 .service-card p {
   margin: 14px 0 0;
-  font-size: 0.96rem;
-}
-
-.portfolio-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 22px;
-}
-
-.filter-button {
-  min-height: 42px;
-  padding: 9px 14px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--white);
-  color: var(--ink);
-  font-weight: 720;
-}
-
-.filter-button:hover,
-.filter-button:focus-visible,
-.filter-button.active {
-  border-color: var(--spruce);
-  background: var(--spruce);
-  color: var(--white);
-  outline: none;
-}
-
-.portfolio-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.portfolio-card {
-  min-height: 230px;
-}
-
-.portfolio-card-body {
-  padding: 22px;
-}
-
-.portfolio-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.portfolio-meta span {
-  display: inline-flex;
-  align-items: center;
-  min-height: 28px;
-  padding: 4px 8px;
-  background: var(--mist);
-  color: var(--spruce-dark);
-  font-size: 0.72rem;
-  font-weight: 760;
-  text-transform: uppercase;
-}
-
-.portfolio-card p {
-  margin: 12px 0 0;
   font-size: 0.96rem;
 }
 
@@ -738,21 +637,10 @@ p {
     padding-top: 140px;
   }
 
-  .metric-band,
   .service-grid,
-  .portfolio-grid,
   .process-list,
   .resource-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .metric-band article:nth-child(2) {
-    border-right: 0;
-  }
-
-  .metric-band article:last-child {
-    grid-column: 1 / -1;
-    border-top: 1px solid var(--line);
   }
 
   .split-layout,
@@ -780,8 +668,7 @@ p {
 
   .hero-content,
   .section,
-  .philosophy-band,
-  .metric-band {
+  .philosophy-band {
     width: min(calc(100% - 36px), var(--container));
   }
 
@@ -799,23 +686,12 @@ p {
     width: 100%;
   }
 
-  .metric-band,
   .service-grid,
-  .portfolio-grid,
   .process-list,
   .team-grid,
   .resource-grid,
   .contact-form {
     grid-template-columns: 1fr;
-  }
-
-  .metric-band article {
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .metric-band article:last-child {
-    border-bottom: 0;
   }
 
   .section,
