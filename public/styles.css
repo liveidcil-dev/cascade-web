@@ -303,42 +303,6 @@ button {
   background: rgba(255, 255, 255, 0.12);
 }
 
-.metric-band {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  width: min(calc(100% - 48px), var(--container));
-  margin: -42px auto 0;
-  position: relative;
-  z-index: 5;
-  background: var(--white);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-}
-
-.metric-band article {
-  min-height: 118px;
-  padding: 24px;
-  border-right: 1px solid var(--line);
-}
-
-.metric-band article:last-child {
-  border-right: 0;
-}
-
-.metric-band span {
-  display: block;
-  color: var(--spruce);
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
-  font-weight: 800;
-  line-height: 1;
-}
-
-.metric-band p {
-  margin: 8px 0 0;
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-}
-
 .section {
   width: min(calc(100% - 48px), var(--container));
   margin: 0 auto;
@@ -745,21 +709,11 @@ p {
     padding-top: 140px;
   }
 
-  .metric-band,
   .service-grid,
   .portfolio-grid,
   .process-list,
   .resource-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .metric-band article:nth-child(2) {
-    border-right: 0;
-  }
-
-  .metric-band article:last-child {
-    grid-column: 1 / -1;
-    border-top: 1px solid var(--line);
   }
 
   .split-layout,
@@ -798,8 +752,7 @@ p {
 
   .hero-content,
   .section,
-  .philosophy-band,
-  .metric-band {
+  .philosophy-band {
     width: min(calc(100% - 36px), var(--container));
   }
 
@@ -817,7 +770,6 @@ p {
     width: 100%;
   }
 
-  .metric-band,
   .service-grid,
   .portfolio-grid,
   .process-list,
@@ -825,15 +777,6 @@ p {
   .resource-grid,
   .contact-form {
     grid-template-columns: 1fr;
-  }
-
-  .metric-band article {
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .metric-band article:last-child {
-    border-bottom: 0;
   }
 
   .section,
