@@ -384,7 +384,7 @@ p {
 
 .service-card,
 .process-list article,
-.team-grid article,
+.profile-card,
 .resource-grid a {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -443,10 +443,10 @@ p {
   grid-template-columns: minmax(0, 760px) minmax(280px, 360px);
   grid-template-areas:
     "copy portrait"
-    "team portrait";
+    ". profile";
   column-gap: clamp(36px, 5vw, 60px);
-  row-gap: 26px;
-  align-items: end;
+  row-gap: 14px;
+  align-items: start;
   justify-content: start;
 }
 
@@ -476,18 +476,12 @@ p {
   object-position: 50% 25%;
 }
 
-.team-grid {
-  grid-area: team;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.team-grid article {
+.profile-card {
+  grid-area: profile;
   padding: 18px;
 }
 
-.team-grid p {
+.profile-card p {
   margin: 8px 0 0;
   font-size: 0.95rem;
 }
@@ -700,7 +694,7 @@ p {
     grid-template-areas:
       "copy"
       "portrait"
-      "team";
+      "profile";
   }
 
   .about-portrait {
@@ -744,7 +738,6 @@ p {
 
   .service-grid,
   .process-list,
-  .team-grid,
   .resource-grid,
   .contact-form {
     grid-template-columns: 1fr;
