@@ -250,7 +250,7 @@ async function submitContact(event) {
     const payload = await response.json();
 
     if (!response.ok) {
-      throw new Error(payload.error || "Could not save your inquiry.");
+      throw new Error(payload.error || "Could not send your inquiry.");
     }
 
     formStatus.textContent = payload.message;

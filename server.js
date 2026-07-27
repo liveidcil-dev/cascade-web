@@ -109,7 +109,7 @@ async function handleContact(req, res) {
   });
 
   sendJson(res, 200, {
-    message: "Thanks. Your inquiry was sent. Cascade Management will follow up shortly."
+    message: "Thanks. Your inquiry was sent. Cascade Management & Real Estate Services will follow up shortly."
   });
 }
 
@@ -276,5 +276,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`Cascade Management site running at http://${HOST}:${PORT}`);
+  console.log(`Cascade Management & Real Estate Services site running at http://${HOST}:${PORT}`);
 });

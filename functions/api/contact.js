@@ -1,6 +1,6 @@
 const MAX_MESSAGE_LENGTH = 2000;
 const DEFAULT_CONTACT_RECIPIENT = "daniel@cascademanagement.us";
-const DEFAULT_FROM_EMAIL = "Cascade Management <onboarding@resend.dev>";
+const DEFAULT_FROM_EMAIL = "Cascade Management & Real Estate Services <onboarding@resend.dev>";
 
 function json(payload, init = {}) {
   return new Response(JSON.stringify(payload), {
@@ -55,7 +55,7 @@ function formatInquiryEmail(inquiry) {
   const phone = inquiry.phone || "Not provided";
 
   return [
-    "New Cascade Management inquiry",
+    "New Cascade Management & Real Estate Services inquiry",
     "",
     `Name: ${inquiry.name}`,
     `Email: ${inquiry.email}`,
@@ -89,7 +89,7 @@ async function sendInquiryEmail(env = {}, inquiry) {
       from: env.CONTACT_FROM_EMAIL || DEFAULT_FROM_EMAIL,
       to: recipients,
       reply_to: inquiry.email,
-      subject: `New Cascade inquiry from ${inquiry.name}`,
+      subject: `New Cascade Management & Real Estate Services inquiry from ${inquiry.name}`,
       text: formatInquiryEmail(inquiry)
     })
   });
@@ -122,7 +122,7 @@ export async function onRequestPost({ request, env = {} }) {
   try {
     await sendInquiryEmail(env, inquiry);
   } catch (deliveryError) {
-    console.error("Cascade contact delivery failed", {
+    console.error("Cascade Management & Real Estate Services contact delivery failed", {
       error: deliveryError.message,
       recipient: getRecipients(env),
       receivedAt: inquiry.receivedAt
@@ -138,7 +138,7 @@ export async function onRequestPost({ request, env = {} }) {
   }
 
   // Avoid logging message bodies in high-volume production unless retention and access controls are defined.
-  console.log("Cascade contact inquiry received", {
+  console.log("Cascade Management & Real Estate Services contact inquiry received", {
     name: inquiry.name,
     email: inquiry.email,
     phoneProvided: Boolean(inquiry.phone),
@@ -148,7 +148,7 @@ export async function onRequestPost({ request, env = {} }) {
 
   return json(
     {
-      message: "Thanks. Your inquiry was sent. Cascade Management will follow up shortly."
+      message: "Thanks. Your inquiry was sent. Cascade Management & Real Estate Services will follow up shortly."
     },
     { status: 200 }
   );
