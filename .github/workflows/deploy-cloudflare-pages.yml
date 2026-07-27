@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - staging
   workflow_dispatch:
 
 permissions:
@@ -11,19 +12,19 @@ permissions:
   deployments: write
 
 concurrency:
-  group: cloudflare-pages-production
+  group: cloudflare-pages-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
   deploy:
-    name: Deploy production
+    name: Deploy ${{ github.ref_name }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
     environment:
-      name: production
-      url: https://cascaderealestatemanagement.com/
+      name: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+      url: ${{ github.ref_name == 'main' && 'https://cascaderealestatemanagement.com/' || 'https://staging.cascaderealestatemanagement.pages.dev/' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

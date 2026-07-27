@@ -79,8 +79,8 @@ button {
   z-index: 20;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 32px;
+  justify-content: flex-end;
+  gap: 18px;
   min-height: 76px;
   padding: 14px max(24px, calc((100vw - var(--container)) / 2));
   color: var(--white);
@@ -98,47 +98,42 @@ button {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-weight: 760;
-  min-width: 0;
-  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .brand-mark {
   display: inline-flex;
-  width: 78px;
+  width: 126px;
   height: 60px;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  padding: 3px;
-  border: 1.5px solid rgba(255, 255, 255, 0.72);
-  border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 10px 26px rgba(7, 15, 12, 0.2);
+  transition: filter 180ms ease, transform 180ms ease;
+  filter: drop-shadow(0 8px 16px rgba(4, 20, 27, 0.28));
 }
 
 .site-header.is-scrolled .brand-mark,
 .site-header.is-open .brand-mark {
-  border-color: var(--line);
-  box-shadow: none;
+  filter: drop-shadow(0 3px 7px rgba(4, 20, 27, 0.14));
+}
+
+.brand:hover .brand-mark,
+.brand:focus-visible .brand-mark {
+  transform: translateY(-1px);
 }
 
 .brand-logo {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 12px;
-}
-
-.brand-name {
-  font-size: 1rem;
 }
 
 .site-nav {
+  position: absolute;
+  left: 50%;
   display: flex;
   align-items: center;
   gap: 8px;
+  transform: translateX(-50%);
 }
 
 .site-nav a {
@@ -377,6 +372,10 @@ p {
   padding: 96px max(24px, calc((100vw - var(--container)) / 2));
 }
 
+.services-section .section-heading {
+  margin-bottom: 0;
+}
+
 .service-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -384,9 +383,8 @@ p {
 }
 
 .service-card,
-.portfolio-card,
 .process-list article,
-.team-grid article,
+.profile-card,
 .resource-grid a {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -408,70 +406,6 @@ p {
 
 .service-card p {
   margin: 14px 0 0;
-  font-size: 0.96rem;
-}
-
-.portfolio-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 22px;
-}
-
-.filter-button {
-  min-height: 42px;
-  padding: 9px 14px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--white);
-  color: var(--ink);
-  font-weight: 720;
-}
-
-.filter-button:hover,
-.filter-button:focus-visible,
-.filter-button.active {
-  border-color: var(--spruce);
-  background: var(--spruce);
-  color: var(--white);
-  outline: none;
-}
-
-.portfolio-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.portfolio-card {
-  min-height: 230px;
-}
-
-.portfolio-card-body {
-  padding: 22px;
-}
-
-.portfolio-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.portfolio-meta span {
-  display: inline-flex;
-  align-items: center;
-  min-height: 28px;
-  padding: 4px 8px;
-  background: var(--mist);
-  color: var(--spruce-dark);
-  font-size: 0.72rem;
-  font-weight: 760;
-  text-transform: uppercase;
-}
-
-.portfolio-card p {
-  margin: 12px 0 0;
   font-size: 0.96rem;
 }
 
@@ -506,26 +440,48 @@ p {
 
 .about-section {
   display: grid;
-  grid-template-columns: minmax(0, 760px);
+  grid-template-columns: minmax(0, 760px) minmax(280px, 360px);
+  grid-template-areas:
+    "copy portrait"
+    ". profile";
+  column-gap: clamp(36px, 5vw, 60px);
+  row-gap: 14px;
+  align-items: start;
   justify-content: start;
+}
+
+.about-copy {
+  grid-area: copy;
 }
 
 .about-copy p:not(.eyebrow) {
   font-size: 1.06rem;
 }
 
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 26px;
+.about-portrait {
+  grid-area: portrait;
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--stone);
+  box-shadow: var(--shadow);
 }
 
-.team-grid article {
+.about-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 25%;
+}
+
+.profile-card {
+  grid-area: profile;
   padding: 18px;
 }
 
-.team-grid p {
+.profile-card p {
   margin: 8px 0 0;
   font-size: 0.95rem;
 }
@@ -647,11 +603,24 @@ p {
 
 .site-footer {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 24px;
   padding: 32px max(24px, calc((100vw - var(--container)) / 2));
   background: var(--spruce-dark);
   color: var(--white);
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.footer-logo {
+  width: 112px;
+  height: auto;
+  flex: 0 0 auto;
 }
 
 .site-footer p {
@@ -665,6 +634,7 @@ p {
 
 @media (max-width: 960px) {
   .site-header {
+    justify-content: space-between;
     min-height: 68px;
   }
 
@@ -684,6 +654,7 @@ p {
     background: var(--paper);
     color: var(--ink);
     border-bottom: 1px solid var(--line);
+    transform: none;
   }
 
   .site-header.is-open .site-nav {
@@ -706,7 +677,6 @@ p {
   }
 
   .service-grid,
-  .portfolio-grid,
   .process-list,
   .resource-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -720,6 +690,17 @@ p {
     gap: 36px;
   }
 
+  .about-section {
+    grid-template-areas:
+      "copy"
+      "portrait"
+      "profile";
+  }
+
+  .about-portrait {
+    width: min(100%, 420px);
+  }
+
   .philosophy-band {
     margin-bottom: 72px;
   }
@@ -730,20 +711,9 @@ p {
     padding-inline: 18px;
   }
 
-  .brand {
-    gap: 8px;
-  }
-
   .brand-mark {
-    width: 62px;
+    width: 104px;
     height: 48px;
-    border-radius: 14px;
-  }
-
-  .brand-name {
-    max-width: 190px;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .hero-content,
@@ -767,9 +737,7 @@ p {
   }
 
   .service-grid,
-  .portfolio-grid,
   .process-list,
-  .team-grid,
   .resource-grid,
   .contact-form {
     grid-template-columns: 1fr;
@@ -791,7 +759,12 @@ p {
   }
 
   .site-footer {
+    align-items: flex-start;
     flex-direction: column;
+  }
+
+  .footer-logo {
+    width: 96px;
   }
 }
 
