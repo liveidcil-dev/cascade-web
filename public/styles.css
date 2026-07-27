@@ -103,8 +103,8 @@ button {
 
 .brand-mark {
   display: inline-flex;
-  width: 84px;
-  height: 64px;
+  width: 126px;
+  height: 60px;
   align-items: center;
   justify-content: center;
   transition: filter 180ms ease, transform 180ms ease;
@@ -128,9 +128,12 @@ button {
 }
 
 .site-nav {
+  position: absolute;
+  left: 50%;
   display: flex;
   align-items: center;
   gap: 8px;
+  transform: translateX(-50%);
 }
 
 .site-nav a {
@@ -713,6 +716,7 @@ p {
     background: var(--paper);
     color: var(--ink);
     border-bottom: 1px solid var(--line);
+    transform: none;
   }
 
   .site-header.is-open .site-nav {
@@ -770,8 +774,8 @@ p {
   }
 
   .brand-mark {
-    width: 66px;
-    height: 50px;
+    width: 104px;
+    height: 48px;
   }
 
   .hero-content,
