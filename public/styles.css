@@ -372,6 +372,10 @@ p {
   padding: 96px max(24px, calc((100vw - var(--container)) / 2));
 }
 
+.services-section .section-heading {
+  margin-bottom: 0;
+}
+
 .service-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
