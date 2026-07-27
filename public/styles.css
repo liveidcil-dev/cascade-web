@@ -440,19 +440,47 @@ p {
 
 .about-section {
   display: grid;
-  grid-template-columns: minmax(0, 760px);
+  grid-template-columns: minmax(0, 760px) minmax(280px, 360px);
+  grid-template-areas:
+    "copy portrait"
+    "team portrait";
+  column-gap: clamp(36px, 5vw, 60px);
+  row-gap: 26px;
+  align-items: end;
   justify-content: start;
+}
+
+.about-copy {
+  grid-area: copy;
 }
 
 .about-copy p:not(.eyebrow) {
   font-size: 1.06rem;
 }
 
+.about-portrait {
+  grid-area: portrait;
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--stone);
+  box-shadow: var(--shadow);
+}
+
+.about-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 25%;
+}
+
 .team-grid {
+  grid-area: team;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
-  margin-top: 26px;
 }
 
 .team-grid article {
@@ -666,6 +694,17 @@ p {
   .contact-section {
     grid-template-columns: 1fr;
     gap: 36px;
+  }
+
+  .about-section {
+    grid-template-areas:
+      "copy"
+      "portrait"
+      "team";
+  }
+
+  .about-portrait {
+    width: min(100%, 420px);
   }
 
   .philosophy-band {
