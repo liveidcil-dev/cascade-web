@@ -581,11 +581,24 @@ p {
 
 .site-footer {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 24px;
   padding: 32px max(24px, calc((100vw - var(--container)) / 2));
   background: var(--spruce-dark);
   color: var(--white);
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.footer-logo {
+  width: 112px;
+  height: auto;
+  flex: 0 0 auto;
 }
 
 .site-footer p {
@@ -714,7 +727,12 @@ p {
   }
 
   .site-footer {
+    align-items: flex-start;
     flex-direction: column;
+  }
+
+  .footer-logo {
+    width: 96px;
   }
 }
 
